@@ -7,32 +7,46 @@ output: html_document
 
 # Informacion de datos
 
-Row ID => Unique ID for each row.
-Order ID => Unique Order ID for each Customer. 
-Order Date => Order Date of the product.
-Ship Date => Shipping Date of the Product.
-Ship Mode=> Shipping Mode specified by the Customer.
-Customer ID => Unique ID to identify each Customer.
-Customer Name => Name of the Customer.
-Segment => The segment where the Customer belongs.
-Country => Country of residence of the Customer.
-City => City of residence of of the Customer.
-State => State of residence of the Customer.
-Postal Code => Postal Code of every Customer.
-Region => Region where the Customer belong.
-Product ID => Unique ID of the Product.
-Category => Category of the product ordered.
-Sub-Category => Sub-Category of the product ordered.
-Product Name => Name of the Product
-Sales => Sales of the Product.
-Quantity => Quantity of the Product.
-Discount => Discount provided.
-Profit => Profit/Loss incurred.
+Informacion de dataset https://www.kaggle.com/datasets/vivek468/superstore-dataset-final 
 
+Row ID => Unique ID for each row.  
+Order ID => Unique Order ID for each Customer.   
+Order Date => Order Date of the product.  
+Ship Date => Shipping Date of the Product.  
+Ship Mode=> Shipping Mode specified by the Customer.  
+Customer ID => Unique ID to identify each Customer.  
+Customer Name => Name of the Customer.  
+Segment => The segment where the Customer belongs.  
+Country => Country of residence of the Customer.  
+City => City of residence of of the Customer.  
+State => State of residence of the Customer.  
+Postal Code => Postal Code of every Customer.  
+Region => Region where the Customer belong.  
+Product ID => Unique ID of the Product.  
+Category => Category of the product ordered.  
+Sub-Category => Sub-Category of the product ordered.  
+Product Name => Name of the Product  
+Sales => Sales of the Product.  
+Quantity => Quantity of the Product.  
+Discount => Discount provided.  
+Profit => Profit/Loss incurred.  
+
+
+
+
+
+
+
+
+# Analisis del set de datos
+
+
+## 1. Carga de los datos
 ```{r}
 datos <-read.csv("Sample - Superstore.csv", sep = ",")
 ```
 
+## 2. Estadisticas basicas
 
 ```{r}
 head(datos)
@@ -51,164 +65,161 @@ summary(datos)
 str(datos)
 ```
 
-# Limpieza
+## Validar si existen campos vacios en el dataset
+
 
 ```{r}
-# SCRIPT DE VALIDACIÓN DE CAMPOS VACÍOS
-# Dataset: Sample - Superstore.csv
-
-# Cargar librerías necesarias
-library(dplyr)
-
-# Cargar datos
-df <- read.csv("Sample - Superstore.csv", stringsAsFactors = FALSE)
-
-# Función para verificar valores vacíos o en blanco
-check_empty_values <- function(data) {
-  cat("=== VALIDACIÓN DE CAMPOS VACÍOS ===\n\n")
-  
-  # 1. Verificar valores NA
-  cat("1. VALORES NA POR COLUMNA:\n")
-  na_counts <- colSums(is.na(data))
-  na_df <- data.frame(
-    Columna = names(na_counts),
-    Valores_NA = as.numeric(na_counts),
-    Porcentaje_NA = round(as.numeric(na_counts) / nrow(data) * 100, 2)
-  )
-  print(na_df)
-  cat("\n")
-  
-  # 2. Verificar cadenas vacías ""
-  cat("2. CADENAS VACÍAS '' POR COLUMNA:\n")
-  empty_string_counts <- sapply(data, function(x) sum(x == "", na.rm = TRUE))
-  empty_string_df <- data.frame(
-    Columna = names(empty_string_counts),
-    Cadenas_Vacias = as.numeric(empty_string_counts),
-    Porcentaje_Vacio = round(as.numeric(empty_string_counts) / nrow(data) * 100, 2)
-  )
-  print(empty_string_df)
-  cat("\n")
-  
-  # 3. Verificar espacios en blanco "   "
-  cat("3. ESPACIOS EN BLANCO POR COLUMNA:\n")
-  whitespace_counts <- sapply(data, function(x) {
-    if(is.character(x)) {
-      sum(grepl("^\\s+$", x), na.rm = TRUE)
-    } else {
-      0
-    }
-  })
-  whitespace_df <- data.frame(
-    Columna = names(whitespace_counts),
-    Espacios_Blanco = as.numeric(whitespace_counts),
-    Porcentaje_Blanco = round(as.numeric(whitespace_counts) / nrow(data) * 100, 2)
-  )
-  print(whitespace_df)
-  cat("\n")
-  
-  # 4. Resumen general
-  cat("4. RESUMEN GENERAL DE CAMPOS VACÍOS:\n")
-  total_empty <- na_counts + empty_string_counts + whitespace_counts
-  summary_df <- data.frame(
-    Columna = names(total_empty),
-    Total_Vacios = as.numeric(total_empty),
-    Porcentaje_Total = round(as.numeric(total_empty) / nrow(data) * 100, 2),
-    Tipo_Dato = sapply(data, class)
-  )
-  print(summary_df)
-  cat("\n")
-  
-  # 5. Columnas con problemas
-  problematic_columns <- summary_df[summary_df$Total_Vacios > 0, ]
-  if(nrow(problematic_columns) > 0) {
-    cat("5. COLUMNAS CON CAMPOS VACÍOS (REQUIEREN ATENCIÓN):\n")
-    print(problematic_columns)
-    cat("\n")
-  } else {
-    cat("5. ¡NO SE ENCONTRARON CAMPOS VACÍOS EN NINGUNA COLUMNA!\n\n")
-  }
-  
-  # 6. Estadísticas generales
-  cat("6. ESTADÍSTICAS GENERALES:\n")
-  cat("Total de filas en el dataset:", nrow(data), "\n")
-  cat("Total de columnas en el dataset:", ncol(data), "\n")
-  cat("Total de celdas vacías:", sum(total_empty), "\n")
-  cat("Porcentaje total de celdas vacías:", 
-      round(sum(total_empty) / (nrow(data) * ncol(data)) * 100, 2), "%\n")
-  
-  return(summary_df)
-}
-
-# Ejecutar validación
-resultados <- check_empty_values(df)
-
-# Análisis adicional por tipo de variable
-cat("\n=== ANÁLISIS POR TIPO DE VARIABLE ===\n\n")
-
-# Variables numéricas críticas
-numeric_vars <- c("Sales", "Profit", "Quantity", "Discount")
-cat("Variables numéricas críticas:\n")
-for(var in numeric_vars) {
-  na_count <- sum(is.na(df[[var]]))
-  cat(sprintf("%-15s: %d NA (%.2f%%)\n", 
-              var, na_count, na_count/nrow(df)*100))
-}
-cat("\n")
-
-# Variables de fecha críticas
-date_vars <- c("Order.Date", "Ship.Date")
-cat("Variables de fecha críticas:\n")
-for(var in date_vars) {
-  na_count <- sum(is.na(df[[var]]))
-  empty_count <- sum(df[[var]] == "", na.rm = TRUE)
-  cat(sprintf("%-15s: %d NA, %d vacíos (%.2f%%)\n", 
-              var, na_count, empty_count, (na_count + empty_count)/nrow(df)*100))
-}
-cat("\n")
-
-# Variables categóricas importantes
-cat_vars <- c("Customer.Name", "Product.Name", "Category", "Sub.Category", "Region")
-cat("Variables categóricas importantes:\n")
-for(var in cat_vars) {
-  na_count <- sum(is.na(df[[var]]))
-  empty_count <- sum(df[[var]] == "", na.rm = TRUE)
-  whitespace_count <- sum(grepl("^\\s+$", df[[var]]), na.rm = TRUE)
-  cat(sprintf("%-15s: %d NA, %d vacíos, %d espacios (%.2f%%)\n", 
-              var, na_count, empty_count, whitespace_count, 
-              (na_count + empty_count + whitespace_count)/nrow(df)*100))
-}
-
-# Guardar resultados en archivo
-write.csv(resultados, "validacion_campos_vacios.csv", row.names = FALSE)
-cat("\nResultados guardados en 'validacion_campos_vacios.csv'\n")
-
-# Visualización rápida de los resultados
-if(any(resultados$Total_Vacios > 0)) {
-  library(ggplot2)
-  
-  problematic <- resultados[resultados$Total_Vacios > 0, ]
-  problematic <- problematic[order(-problematic$Porcentaje_Total), ]
-  
-  problematic$Columna <- factor(problematic$Columna, 
-                               levels = problematic$Columna[order(problematic$Porcentaje_Total)])
-  
-  p <- ggplot(problematic, aes(x = Columna, y = Porcentaje_Total, fill = Tipo_Dato)) +
-    geom_bar(stat = "identity") +
-    coord_flip() +
-    labs(title = "Porcentaje de Campos Vacíos por Columna",
-         x = "Columna", 
-         y = "Porcentaje de Valores Vacíos (%)") +
-    theme_minimal() +
-    geom_text(aes(label = paste0(Porcentaje_Total, "%")), 
-              hjust = -0.1, size = 3)
-  
-  print(p)
-  ggsave("grafico_campos_vacios.png", plot = p, width = 10, height = 6)
-  cat("Gráfico guardado como 'grafico_campos_vacios.png'\n")
-}
-
-cat("\n=== VALIDACIÓN COMPLETADA ===\n")
+colSums(is.na(datos))
 ```
+
+# Limpieza de datos
+
+### 1. Explicacion del tipo de limpieza a realizar
+
+Sobre todo el set de datos compartido por parte de la empresa se requiere dar un enfoque de los siguientes aspectos.
+
+- Performance por categoría y subcategoría  
+
+- Productos más rentables vs menos rentables  
+
+- Relación entre descuentos y profit  
+
+En este caso no se requieren de muchos de los datos que se encuentran en el dataset, por lo que se procederá a eliminarlos del mismo para crear un dataframe enfocado específicamente en la parte de ventas buscando los resultados propuestos.
+
+El enfoque del proyecto es rentabilidad, categorías, subcategorías, descuentos, ventas, cantidad, profit, y regiones. 
+
+##### **Estas son las columnas que NO aportan nada a este análisis:**
+
+| Columna                              | Motivo para eliminar                                    |
+| ------------------------------------ | ------------------------------------------------------- |
+| **Row ID**                           | Es solo un índice. No aporta información.               |
+| **Order ID**                         | No se analiza rendimiento por orden.                    |
+| **Customer ID**                      | No relevante en análisis de rentabilidad general.       |
+| **Customer Name**                    | No aporta al análisis.                                  |
+| **City**, **State**, **Postal Code** | No se está haciendo análisis geográfico detallado.      |
+| **Country**                          | Todos los registros son de USA → no aporta.             |
+| **Product ID**                       | No analizamos a nivel SKU, sino categoría/subcategoría. |
+
+
+##### **Columnas que SI se mantienen**
+
+| Columna                              | Motivo para mantener                                    |
+| ------------------------------------ | ------------------------------------------------------- |
+| **Order Date**                       | Permite explorar tendencias temporales en ventas, descuentos y                                          profit                                                      |
+| **Ship Date**                        | Se decide mantener para apoyar la busqueda de tendencias    |
+| **Ship Mode**                        | Puede influir en costos o márgenes, tambien es útil para                                                segmentar resultados en el performance.                     |
+| **Segment**                          | Útil para comparar rentabilidad entre segmentos (Consumer,                                              Corporate, Home Office).                                    |
+| **Region**                           | Permite comparar performance por región, útil para rentabilidad                                          y tendencias.                                               |
+| **Category**                         | Princial variable para análisis de performance              |
+| **Sub-Category**                     | Permite identificar subcategorías más o menos rentable      |
+| **Product Name**                     | Necesario para identificar productos más rentables vs menos                                             rentables                                                   |
+| **Sales**                            | Métrica central para performance y análisis de rentabilidad |
+| **Quantity**                         | Permite calcular métricas adicionales como profit por unidad|
+| **Discount**                         | Para analizar la relación entre descuentos y profit         |
+| **Profit**                           | Clave para evaluar la rentabilidad                          |
+
+### 2. Creacion del dataframe
+
+```{r}
+dataframeDatos <- subset(datos, select = -c(Row.ID, Order.ID, Customer.ID, Customer.Name, Country, 
+                                            City, State, Postal.Code, Product.ID))
+```
+
+Con esto creamos el nuevo dataframe con las columnas necesarias para su análisis
+
+```{r}
+head(dataframeDatos)
+```
+
+
+### 3. Conversión de fechas a tipo date
+
+
+Las variables **Order.Date** y **Ship.Date** actualmente son de tipo character, por lo que se debe pasar a convertir en formato date para su análisis
+
+Formato actual **Order.Date**
+```{r}
+class(dataframeDatos$Order.Date)
+summary(dataframeDatos$Order.Date)
+head(dataframeDatos$Order.Date)
+```
+
+Formato actual **Ship.Date**
+```{r}
+class(dataframeDatos$Ship.Date)
+summary(dataframeDatos$Ship.Date)
+head(dataframeDatos$Ship.Date)
+```
+
+
+Cambio de Order.Date
+```{r}
+dataframeDatos$Order.Date <- as.Date(dataframeDatos$Order.Date, format = "%m/%d/%Y")
+```
+
+```{r}
+class(dataframeDatos$Order.Date)
+head(dataframeDatos$Order.Date)
+```
+
+Cambio de Ship.Date
+```{r}
+dataframeDatos$Ship.Date <- as.Date(dataframeDatos$Ship.Date, format = "%m/%d/%Y")
+```
+
+```{r}
+class(dataframeDatos$Ship.Date)
+head(dataframeDatos$Ship.Date)
+```
+
+### 4. Conversión de datos
+
+```{r}
+class(dataframeDatos$Quantity)
+```
+
+```{r}
+class(dataframeDatos$Discount)
+```
+
+```{r}
+class(dataframeDatos$Sales)
+```
+
+```{r}
+class(dataframeDatos$Profit)
+
+```
+
+Como podemos observar en las variables **Sales**, **Profit**, **Quantity**, **Discount** que deberian ser de tipo numerico. En ese caso se procede a convertir todos esos datos a tipo numerico para su análisis apesar de algunos ya esten en ese formato.
+
+
+
+```{r}
+dataframeDatos$Sales <- as.numeric(dataframeDatos$Sales)
+dataframeDatos$Profit <- as.numeric(dataframeDatos$Profit)
+dataframeDatos$Quantity <- as.numeric(dataframeDatos$Quantity)
+dataframeDatos$Discount <- as.numeric(dataframeDatos$Discount)
+```
+
+
+Validamos los tipos de clase de los datos
+
+```{r}
+class(dataframeDatos$Sales)
+class(dataframeDatos$Profit)
+class(dataframeDatos$Quantity)
+class(dataframeDatos$Discount)
+```
+
+
+
+
+
+
+
+
+
 
 
 
