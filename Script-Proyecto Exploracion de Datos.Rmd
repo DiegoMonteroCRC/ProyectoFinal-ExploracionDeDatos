@@ -41,12 +41,12 @@ Profit => Profit/Loss incurred.
 # Analisis del set de datos
 
 
-## 1. Carga de los datos
+### 1. Carga de los datos
 ```{r}
 datos <-read.csv("Sample - Superstore.csv", sep = ",")
 ```
 
-## 2. Estadisticas basicas
+### 2. Estadisticas basicas
 
 ```{r}
 head(datos)
@@ -65,12 +65,13 @@ summary(datos)
 str(datos)
 ```
 
-## Validar si existen campos vacios en el dataset
+### 3. Validar si existen campos vacios en el dataset
 
 
 ```{r}
 colSums(is.na(datos))
 ```
+
 
 # Limpieza de datos
 
@@ -211,6 +212,19 @@ class(dataframeDatos$Profit)
 class(dataframeDatos$Quantity)
 class(dataframeDatos$Discount)
 ```
+
+### Validacion de valores no negativos
+
+En este punto validamos que los valores como **Sales**, **Quantity** y **Discount** no tengan ningún tipo de valor negativo ya que por si naturaleza deben ser siempre ≥ 0
+
+```{r}
+summary(dataframeDatos$Sales)
+summary(dataframeDatos$Quantity)
+summary(dataframeDatos$Discount)
+```
+
+
+
 
 
 

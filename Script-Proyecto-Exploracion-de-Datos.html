@@ -384,12 +384,12 @@ Profit =&gt; Profit/Loss incurred.</p>
 </div>
 <div id="analisis-del-set-de-datos" class="section level1">
 <h1>Analisis del set de datos</h1>
-<div id="carga-de-los-datos" class="section level2">
-<h2>1. Carga de los datos</h2>
+<div id="carga-de-los-datos" class="section level3">
+<h3>1. Carga de los datos</h3>
 <pre class="r"><code>datos &lt;-read.csv(&quot;Sample - Superstore.csv&quot;, sep = &quot;,&quot;)</code></pre>
 </div>
-<div id="estadisticas-basicas" class="section level2">
-<h2>2. Estadisticas basicas</h2>
+<div id="estadisticas-basicas" class="section level3">
+<h3>2. Estadisticas basicas</h3>
 <pre class="r"><code>head(datos)</code></pre>
 <pre><code>##   Row.ID       Order.ID Order.Date  Ship.Date      Ship.Mode Customer.ID
 ## 1      1 CA-2016-152156  11/8/2016 11/11/2016   Second Class    CG-12520
@@ -529,8 +529,8 @@ Profit =&gt; Profit/Loss incurred.</p>
 ##  $ Discount     : num  0 0 0 0.45 0.2 0 0 0.2 0.2 0 ...
 ##  $ Profit       : num  41.91 219.58 6.87 -383.03 2.52 ...</code></pre>
 </div>
-<div id="validar-si-existen-campos-vacios-en-el-dataset" class="section level2">
-<h2>Validar si existen campos vacios en el dataset</h2>
+<div id="validar-si-existen-campos-vacios-en-el-dataset" class="section level3">
+<h3>3. Validar si existen campos vacios en el dataset</h3>
 <pre class="r"><code>colSums(is.na(datos))</code></pre>
 <pre><code>##        Row.ID      Order.ID    Order.Date     Ship.Date     Ship.Mode 
 ##             0             0             0             0             0 
@@ -774,6 +774,25 @@ dataframeDatos$Discount &lt;- as.numeric(dataframeDatos$Discount)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <pre class="r"><code>class(dataframeDatos$Discount)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
+</div>
+<div id="validacion-de-valores-no-negativos" class="section level3">
+<h3>Validacion de valores no negativos</h3>
+<p>En este punto validamos que los valores como <strong>Sales</strong>,
+<strong>Quantity</strong> y <strong>Discount</strong> no tengan ningún
+tipo de valor negativo ya que por si naturaleza deben ser siempre ≥
+0</p>
+<pre class="r"><code>summary(dataframeDatos$Sales)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##     0.444    17.280    54.490   229.858   209.940 22638.480</code></pre>
+<pre class="r"><code>summary(dataframeDatos$Quantity)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00    2.00    3.00    3.79    5.00   14.00</code></pre>
+<pre class="r"><code>summary(dataframeDatos$Discount)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.0000  0.0000  0.2000  0.1562  0.2000  0.8000</code></pre>
+</div>
+<div id="observaciones" class="section level3">
+<h3>Observaciones</h3>
 </div>
 </div>
 
