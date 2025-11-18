@@ -1,0 +1,20 @@
+Enfoque del proyecto
+
+    Performance por categoría y subcategoría
+
+    Productos más rentables vs menos rentables
+
+    Relación entre descuentos y profit
+
+
+Nadin
+
+Explicacion de los datos, estadisticas basicas
+
+Diego
+
+Limpieza de datos
+
+Roberto, Dennis
+
+EDA
