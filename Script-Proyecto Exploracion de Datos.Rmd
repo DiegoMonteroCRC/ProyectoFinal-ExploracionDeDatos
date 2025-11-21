@@ -363,9 +363,58 @@ summary(dataframeDatos$Discount)
 
 
 
+boxplot options 
 
 
+```{r}
+dataframeDatos$RangoDescuento <- cut(
+  dataframeDatos$Discount,
+  breaks = c(-Inf, 0.10, 0.20, 0.50, Inf),
+  labels = c('0-10%', '10-20%', '20-50%', '>50%')
+)
+boxplot(Profit ~ RangoDescuento,
+        data = dataframeDatos,
+        main = 'Profit por rangos de descuento',
+        xlab = 'Rango de descuento',
+        ylab = 'Profit',
+        col = c('#a1d99b', '#74c476', '#31a354', '#006d2c'),
+        ylim = c(-2000, 2000))  # Ajusta según tus datos
+```
 
+
+```{r}
+
+dataframeDatos$RangoDescuento <- cut(
+  dataframeDatos$Discount,
+  breaks = c(-Inf, 0.10, 0.20, 0.50, Inf),
+  labels = c('0-10%', '10-20%', '20-50%', '>50%'))
+  
+boxplot(Profit ~ RangoDescuento,
+        data = dataframeDatos,
+        main = 'Profit por rangos de descuento',
+        xlab = 'Rango de descuento',
+        ylab = 'Profit',
+        col = c('#a1d99b', '#74c476', '#31a354', '#006d2c'),
+        outline = FALSE)  # No grafica los outliers
+```
+El boxplot se ve tan comprimido porque hay valores atípicos extremos en tus datos de profit que llegan hasta aproximadamente 7000 y bajan hasta -6000. Cuando R genera el gráfico, necesita incluir todos estos valores en el eje Y, lo que crea una escala muy amplia de alrededor de 13000 unidades. Dentro de esta escala tan grande, las cajas que representan el rango intercuartílico (donde está el 50% central de tus datos) probablemente miden solo unos cientos de unidades, por lo que visualmente se ven como simples líneas horizontales aplastadas.
+
+Cuando quitas los outliers usando `outline = FALSE`, la caja parece volverse mucho más grande y la mediana (esa línea horizontal dentro de la caja) parece moverse, pero en realidad ninguno de estos elementos cambia sus valores numéricos. Lo que sucede es que R automáticamente reescala el eje Y para ajustarse únicamente al rango de los bigotes, que es mucho más pequeño, quizás de -1000 a +1500. La misma caja que antes medía 500 unidades en una escala de 13000 ahora mide esas mismas 500 unidades en una escala de solo 2500, por lo que ocupa proporcionalmente mucho más espacio en el gráfico. Es como hacer zoom a una fotografía: los objetos parecen más grandes pero en realidad mantienen el mismo tamaño, solo cambia la perspectiva desde la que los observas.
+
+```{r}
+# CON outliers (escala grande)
+boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
+        ylim = c(-6000, 7000))  # Caja se ve pequeña
+
+# SIN outliers pero MANTENIENDO la escala original
+boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
+        outline = FALSE,
+        ylim = c(-6000, 7000))  # Caja sigue viéndose pequeña
+
+# SIN outliers y dejando que R reescale
+boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
+        outline = FALSE)  # Ahora la caja se ve GRANDE
+```
 
 
 
