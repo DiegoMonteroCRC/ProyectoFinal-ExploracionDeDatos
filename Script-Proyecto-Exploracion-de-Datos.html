@@ -357,6 +357,230 @@ display: none;
 </div>
 
 
+<div id="descripción-completa-del-dataset-sample---superstore" class="section level1">
+<h1>Descripción Completa del Dataset <em>Sample - Superstore</em></h1>
+<p>El dataset <strong>Sample - Superstore</strong> contiene información
+detallada sobre transacciones comerciales realizadas por una tienda
+minorista en Estados Unidos.</p>
+<p>Incluye datos sobre ventas, clientes, productos, logística y
+rentabilidad con un total de 9,994 registros y 21 variables relacionadas
+con transacciones individuales.</p>
+<p>Por lo que para efecto de proyecto se presentara y se expondra un
+analasis minusioso y critico referente a dicho dataset para una mejor
+interpretacion y comprension.</p>
+<div id="estructura-general-del-dataset" class="section level2">
+<h2>1. Estructura General del Dataset</h2>
+<ul>
+<li><p><strong>Total de filas:</strong> 9,994<br />
+</p></li>
+<li><p><strong>Total de columnas:</strong> 21<br />
+</p></li>
+<li><p><strong>Valores faltantes:</strong> Ninguno<br />
+</p></li>
+<li><p><strong>Tipos de datos presentes:</strong></p>
+<ul>
+<li>Numéricos: <code>Row ID</code>, <code>Sales</code>,
+<code>Quantity</code>, <code>Discount</code>, <code>Profit</code><br />
+</li>
+<li>Fechas (importadas como texto): <code>Order Date</code>,
+<code>Ship Date</code><br />
+</li>
+<li>Categóricos: el resto de columnas</li>
+</ul></li>
+</ul>
+<div id="observación" class="section level3">
+<h3>Observación</h3>
+<p>Aunque los datos no contienen valores faltantes, algunas columnas no
+están en el tipo adecuado para análisis (por ejemplo, fechas como texto
+y códigos postales como caracteres).</p>
+<hr />
+</div>
+</div>
+<div id="descripción-detallada-de-cada-variable" class="section level2">
+<h2>2. Descripción Detallada de Cada Variable</h2>
+<div id="identificadores" class="section level3">
+<h3>2.1 Identificadores</h3>
+<div id="row-id" class="section level4">
+<h4><strong>Row ID</strong></h4>
+<ul>
+<li>Tipo: entero<br />
+</li>
+<li>Identificador secuencial de fila<br />
+</li>
+<li><strong>Observación:</strong> No aporta valor analítico. Es
+redundante, ya que existen otros identificadores más relevantes.</li>
+</ul>
+</div>
+<div id="order-id" class="section level4">
+<h4><strong>Order ID</strong></h4>
+<ul>
+<li>Identificador del pedido<br />
+</li>
+<li>No es único debido a que un pedido puede contener múltiples
+productos<br />
+</li>
+<li><strong>Observación:</strong> Representa estructura de
+cabecera-detalle. Necesita agregación para análisis a nivel de
+pedido.</li>
+</ul>
+</div>
+<div id="order-date" class="section level4">
+<h4><strong>Order Date</strong></h4>
+<ul>
+<li>Fecha de compra (texto)<br />
+</li>
+<li><strong>Observación:</strong> Requiere conversión a formato fecha
+para análisis temporal.</li>
+</ul>
+</div>
+<div id="ship-date" class="section level4">
+<h4><strong>Ship Date</strong></h4>
+<ul>
+<li>Fecha de envío del pedido<br />
+</li>
+<li><strong>Observación:</strong> Permite analizar tiempos de despacho
+una vez convertida a datetime.</li>
+</ul>
+</div>
+<div id="ship-mode" class="section level4">
+<h4><strong>Ship Mode</strong></h4>
+<p>Categorías posibles: - <em>Same Day</em><br />
+- <em>First Class</em><br />
+- <em>Second Class</em><br />
+- <em>Standard Class</em></p>
+<p><strong>Observación:</strong> Útil para análisis logístico, aunque
+faltan datos de costos de envío o transportistas.</p>
+<hr />
+</div>
+</div>
+<div id="información-del-cliente" class="section level3">
+<h3>2.2 Información del Cliente</h3>
+<div id="customer-id" class="section level4">
+<h4><strong>Customer ID</strong></h4>
+<ul>
+<li>Identificador único del cliente</li>
+</ul>
+</div>
+<div id="customer-name" class="section level4">
+<h4><strong>Customer Name</strong></h4>
+<ul>
+<li>Nombre del cliente<br />
+</li>
+<li><strong>Observación:</strong> Es texto libre; se necesita hacer un
+procesamiento previo.</li>
+</ul>
+</div>
+<div id="segment" class="section level4">
+<h4><strong>Segment</strong></h4>
+<p>Categorías: - Consumer<br />
+- Corporate<br />
+- Home Office</p>
+<p><strong>Observación:</strong> Segmentación simple basada en tipo de
+cliente; puede ampliarse para análisis de valor o fidelización.</p>
+<hr />
+</div>
+</div>
+<div id="ubicación-geográfica" class="section level3">
+<h3>2.3 Ubicación Geográfica</h3>
+<p>Variables incluidas: - Country<br />
+- City<br />
+- State<br />
+- Postal Code<br />
+- Region</p>
+<p><strong>Observación:</strong><br />
+- <code>Country</code> no aporta información porque es constante (solo
+Estados Unidos).<br />
+- <code>Postal Code</code> debería normalizarse y ajustarse a tipo
+numérico para análisis geoespacial.</p>
+<hr />
+</div>
+<div id="información-del-producto" class="section level3">
+<h3>2.4 Información del Producto</h3>
+<div id="product-id" class="section level4">
+<h4><strong>Product ID</strong></h4>
+<ul>
+<li>Identificador del producto</li>
+</ul>
+</div>
+<div id="category" class="section level4">
+<h4><strong>Category</strong></h4>
+<p>Tres categorías principales: - Furniture<br />
+- Office Supplies<br />
+- Technology</p>
+</div>
+<div id="sub-category" class="section level4">
+<h4><strong>Sub-Category</strong></h4>
+<p>Categorías más específicas como chairs, phones, binders, etc.</p>
+</div>
+<div id="product-name" class="section level4">
+<h4><strong>Product Name</strong></h4>
+<ul>
+<li>Nombre descriptivo del producto<br />
+</li>
+<li><strong>Observación:</strong> Texto extenso que puede requerir
+limpieza para análisis como NLP o minería de texto.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="métricas-de-venta" class="section level3">
+<h3>2.5 Métricas de Venta</h3>
+<div id="sales" class="section level4">
+<h4><strong>Sales</strong></h4>
+<ul>
+<li>Monto vendido por línea de pedido<br />
+</li>
+<li>Rango aproximado: 0.44 a 22,638<br />
+</li>
+<li><strong>Observación:</strong> Distribución sesgada con valores
+atípicos altos.</li>
+</ul>
+</div>
+<div id="quantity" class="section level4">
+<h4><strong>Quantity</strong></h4>
+<ul>
+<li>Cantidad vendida (1 a 14)</li>
+</ul>
+</div>
+<div id="discount" class="section level4">
+<h4><strong>Discount</strong></h4>
+<ul>
+<li>Porcentaje de descuento aplicado (0 a 0.8)<br />
+</li>
+<li><strong>Observación:</strong> Descuentos elevados tienden a afectar
+la rentabilidad de los productos.</li>
+</ul>
+</div>
+<div id="profit" class="section level4">
+<h4><strong>Profit</strong></h4>
+<ul>
+<li>Ganancia generada por línea de pedido<br />
+</li>
+<li>Promedio: 28.65<br />
+</li>
+<li>Mínimo: -6599.98<br />
+</li>
+<li>Máximo: 8399.98<br />
+</li>
+<li><strong>Observación:</strong> La existencia de valores altamente
+negativos indica problemas en la estructura de costos o aplicación de
+descuentos.</li>
+</ul>
+<hr />
+</div>
+</div>
+</div>
+<div id="conclusión" class="section level2">
+<h2>4. Conclusión</h2>
+<p>El dataset <strong>Sample - Superstore</strong> es potente y versátil
+para el estudio y proyecto, sin embargo, requiere pasos previos de
+limpieza, conversión de tipos y revisión de outliers para obtener
+análisis más precisos y representativos, por lo que acontinuacion se va
+a realizar un analisis de los datos y sus variables, para asi justificar
+y determinar que variables usar y cuales no en el proyecto.</p>
+<hr />
+</div>
+</div>
 <div id="informacion-de-datos" class="section level1">
 <h1>Informacion de datos</h1>
 <p>Informacion de dataset <a href="https://www.kaggle.com/datasets/vivek468/superstore-dataset-final" class="uri">https://www.kaggle.com/datasets/vivek468/superstore-dataset-final</a></p>
