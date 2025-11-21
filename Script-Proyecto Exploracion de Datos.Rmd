@@ -5,6 +5,147 @@ date: "2025-11-18"
 output: html_document
 ---
 
+# Descripción Completa del Dataset *Sample - Superstore*
+
+El dataset **Sample - Superstore** contiene información detallada sobre transacciones comerciales realizadas por una tienda minorista en Estados Unidos.
+
+Incluye datos sobre ventas, clientes, productos, logística y rentabilidad con un total de 9,994 registros y 21 variables relacionadas con transacciones individuales.
+
+Por lo que para efecto de proyecto se presentara y se expondra un analasis minusioso y critico referente a dicho dataset para una mejor interpretacion y comprension. 
+
+## 1. Estructura General del Dataset
+
+- **Total de filas:** 9,994  
+- **Total de columnas:** 21  
+- **Valores faltantes:** Ninguno  
+- **Tipos de datos presentes:**  
+
+  - Numéricos: `Row ID`, `Sales`, `Quantity`, `Discount`, `Profit`  
+  - Fechas (importadas como texto): `Order Date`, `Ship Date`  
+  - Categóricos: el resto de columnas  
+
+### Observación
+Aunque los datos no contienen valores faltantes, algunas columnas no están en el tipo adecuado para análisis (por ejemplo, fechas como texto y códigos postales como caracteres).
+
+---
+
+## 2. Descripción Detallada de Cada Variable
+
+### 2.1 Identificadores
+
+#### **Row ID**
+- Tipo: entero  
+- Identificador secuencial de fila  
+- **Observación:** No aporta valor analítico. Es redundante, ya que existen otros identificadores más relevantes.
+
+#### **Order ID**
+- Identificador del pedido  
+- No es único debido a que un pedido puede contener múltiples productos  
+- **Observación:** Representa estructura de cabecera-detalle. Necesita agregación para análisis a nivel de pedido.
+
+#### **Order Date**
+- Fecha de compra (texto)  
+- **Observación:** Requiere conversión a formato fecha para análisis temporal.
+
+#### **Ship Date**
+- Fecha de envío del pedido  
+- **Observación:** Permite analizar tiempos de despacho una vez convertida a datetime.
+
+#### **Ship Mode**
+Categorías posibles:
+- *Same Day*  
+- *First Class*  
+- *Second Class*  
+- *Standard Class*  
+
+**Observación:** Útil para análisis logístico, aunque faltan datos de costos de envío o transportistas.
+
+---
+
+### 2.2 Información del Cliente
+
+#### **Customer ID**
+- Identificador único del cliente
+
+#### **Customer Name**
+- Nombre del cliente  
+- **Observación:** Es texto libre; se necesita hacer un procesamiento previo.
+
+#### **Segment**
+Categorías:
+- Consumer  
+- Corporate  
+- Home Office  
+
+**Observación:** Segmentación simple basada en tipo de cliente; puede ampliarse para análisis de valor o fidelización.
+
+---
+
+### 2.3 Ubicación Geográfica
+
+Variables incluidas:
+- Country  
+- City  
+- State  
+- Postal Code  
+- Region  
+
+**Observación:**  
+- `Country` no aporta información porque es constante (solo Estados Unidos).  
+- `Postal Code` debería normalizarse y ajustarse a tipo numérico para análisis geoespacial.
+
+---
+
+### 2.4 Información del Producto
+
+#### **Product ID**
+- Identificador del producto
+
+#### **Category**
+Tres categorías principales:
+
+- Furniture  
+- Office Supplies  
+- Technology  
+
+#### **Sub-Category**
+Categorías más específicas como chairs, phones, binders, etc.
+
+#### **Product Name**
+- Nombre descriptivo del producto  
+- **Observación:** Texto extenso que puede requerir limpieza para análisis como NLP o minería de texto.
+
+---
+
+### 2.5 Métricas de Venta
+
+#### **Sales**
+- Monto vendido por línea de pedido  
+- Rango aproximado: 0.44 a 22,638  
+- **Observación:** Distribución sesgada con valores atípicos altos.
+
+#### **Quantity**
+- Cantidad vendida (1 a 14)
+
+#### **Discount**
+- Porcentaje de descuento aplicado (0 a 0.8)  
+- **Observación:** Descuentos elevados tienden a afectar la rentabilidad de los productos.
+
+#### **Profit**
+- Ganancia generada por línea de pedido  
+- Promedio: 28.65  
+- Mínimo: -6599.98  
+- Máximo: 8399.98  
+- **Observación:** La existencia de valores altamente negativos indica problemas en la estructura de costos o aplicación de descuentos.
+
+---
+
+## 4. Conclusión
+
+El dataset **Sample - Superstore** es potente y versátil para el estudio y proyecto, sin embargo, requiere pasos previos de limpieza, conversión de tipos y revisión de outliers para obtener análisis más precisos y representativos, por lo que acontinuacion se va a realizar un analisis de los datos y sus variables, para asi justificar y determinar que variables usar y cuales no en el proyecto. 
+
+---
+
 # Informacion de datos
 
 Informacion de dataset https://www.kaggle.com/datasets/vivek468/superstore-dataset-final 
@@ -30,11 +171,6 @@ Sales => Sales of the Product.
 Quantity => Quantity of the Product.  
 Discount => Discount provided.  
 Profit => Profit/Loss incurred.  
-
-
-
-
-
 
 
 
