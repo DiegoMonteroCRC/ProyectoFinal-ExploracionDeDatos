@@ -5,6 +5,32 @@ date: "2025-11-18"
 output: html_document
 ---
 
+# Informacion de datos
+
+Informacion de dataset https://www.kaggle.com/datasets/vivek468/superstore-dataset-final 
+
+Row ID => Unique ID for each row.  
+Order ID => Unique Order ID for each Customer.   
+Order Date => Order Date of the product.  
+Ship Date => Shipping Date of the Product.  
+Ship Mode=> Shipping Mode specified by the Customer.  
+Customer ID => Unique ID to identify each Customer.  
+Customer Name => Name of the Customer.  
+Segment => The segment where the Customer belongs.  
+Country => Country of residence of the Customer.  
+City => City of residence of of the Customer.  
+State => State of residence of the Customer.  
+Postal Code => Postal Code of every Customer.  
+Region => Region where the Customer belong.  
+Product ID => Unique ID of the Product.  
+Category => Category of the product ordered.  
+Sub-Category => Sub-Category of the product ordered.  
+Product Name => Name of the Product  
+Sales => Sales of the Product.  
+Quantity => Quantity of the Product.  
+Discount => Discount provided.  
+Profit => Profit/Loss incurred.  
+
 # Descripción Completa del Dataset *Sample - Superstore*
 
 El dataset **Sample - Superstore** contiene información detallada sobre transacciones comerciales realizadas por una tienda minorista en Estados Unidos.
@@ -146,31 +172,14 @@ El dataset **Sample - Superstore** es potente y versátil para el estudio y proy
 
 ---
 
-# Informacion de datos
 
-Informacion de dataset https://www.kaggle.com/datasets/vivek468/superstore-dataset-final 
 
-Row ID => Unique ID for each row.  
-Order ID => Unique Order ID for each Customer.   
-Order Date => Order Date of the product.  
-Ship Date => Shipping Date of the Product.  
-Ship Mode=> Shipping Mode specified by the Customer.  
-Customer ID => Unique ID to identify each Customer.  
-Customer Name => Name of the Customer.  
-Segment => The segment where the Customer belongs.  
-Country => Country of residence of the Customer.  
-City => City of residence of of the Customer.  
-State => State of residence of the Customer.  
-Postal Code => Postal Code of every Customer.  
-Region => Region where the Customer belong.  
-Product ID => Unique ID of the Product.  
-Category => Category of the product ordered.  
-Sub-Category => Sub-Category of the product ordered.  
-Product Name => Name of the Product  
-Sales => Sales of the Product.  
-Quantity => Quantity of the Product.  
-Discount => Discount provided.  
-Profit => Profit/Loss incurred.  
+# Carga de librerias
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
 
 
 
@@ -383,12 +392,6 @@ boxplot(Profit ~ RangoDescuento,
 
 
 ```{r}
-
-dataframeDatos$RangoDescuento <- cut(
-  dataframeDatos$Discount,
-  breaks = c(-Inf, 0.10, 0.20, 0.50, Inf),
-  labels = c('0-10%', '10-20%', '20-50%', '>50%'))
-  
 boxplot(Profit ~ RangoDescuento,
         data = dataframeDatos,
         main = 'Profit por rangos de descuento',
@@ -401,27 +404,132 @@ El boxplot se ve tan comprimido porque hay valores atípicos extremos en tus dat
 
 Cuando quitas los outliers usando `outline = FALSE`, la caja parece volverse mucho más grande y la mediana (esa línea horizontal dentro de la caja) parece moverse, pero en realidad ninguno de estos elementos cambia sus valores numéricos. Lo que sucede es que R automáticamente reescala el eje Y para ajustarse únicamente al rango de los bigotes, que es mucho más pequeño, quizás de -1000 a +1500. La misma caja que antes medía 500 unidades en una escala de 13000 ahora mide esas mismas 500 unidades en una escala de solo 2500, por lo que ocupa proporcionalmente mucho más espacio en el gráfico. Es como hacer zoom a una fotografía: los objetos parecen más grandes pero en realidad mantienen el mismo tamaño, solo cambia la perspectiva desde la que los observas.
 
+
+
+
+
+
+
+cnjdsknvkjdnvjknsdfjnvkjdsnvbfsnvjnds
+
+
 ```{r}
-# CON outliers (escala grande)
-boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
-        ylim = c(-6000, 7000))  # Caja se ve pequeña
+# Boxplot mejorado de Profit por rangos de descuento
+boxplot(Sales ~ RangoDescuento,
+        data = dataframeDatos,
+        main = 'Profit por rangos de descuento',
+        xlab = 'Rango de descuento',
+        ylab = 'Profit',
+        col = c('#a1d99b', '#74c476', '#31a354', '#006d2c'),
+        border = "black",
+        outline = FALSE
+        )
 
-# SIN outliers pero MANTENIENDO la escala original
-boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
-        outline = FALSE,
-        ylim = c(-6000, 7000))  # Caja sigue viéndose pequeña
+```
 
-# SIN outliers y dejando que R reescale
-boxplot(Profit ~ RangoDescuento, data = dataframeDatos,
-        outline = FALSE)  # Ahora la caja se ve GRANDE
+En el boxplot sales vs discount, se observa que las ventas más altas se concentran en el rango de descuento más bajo (0-10%), esto sugiere que los productos más demandados no requieren descuentos agresivos para venderse, luego entre 10–20% y 20–50%, las ventas permanecen bajas y estables, sugiere que los descuentos moderados no generan un aumento notable en las ventas, y para los descuentos superiores al 50%, las ventas no aumentan de forma significativa. Se puede concluir, que los descuentos ya sean moderados o altos no tienen un efecto evidente en el aumento de ventas.
+
+
+
+```{r}
+dataframeDatos %>%
+  mutate(RangoDescuento = cut(
+    Discount, 
+    breaks = c(-Inf, 0.10, 0.20, 0.50, Inf),
+    labels = c("0-10%", "10-20%", "20-50%", ">50%")
+  )) %>%
+  group_by(RangoDescuento) %>%
+  summarise(ProfitPromedio = mean(Profit, na.rm = TRUE)) %>%
+  ggplot(aes(x = RangoDescuento, y = ProfitPromedio)) +
+  geom_col(fill = "#238b45") +
+  labs(title = "Profit promedio por rango de descuento")
+```
+
+En este gráfico se observa, que el rango de descuento 0–10% es el único claramente rentable, el rango de 10–20% aún mantiene profit promedio positivo, pero considerablemente más bajo, a partir del 20% de descuento, el profit promedio se vuelve negativo y el rango >50% también genera pérdidas significativas. Se comprueba los análisis anteriores, la estrategia de descuentos no está funcionando como palanca comercial positiva, solo está reduciendo la rentabilidad.
+
+
+
+
+# Shapiro 
+
+### Performance por categoría
+```{r}
+muestra <- sample(dataframeDatos$Sales[dataframeDatos$Category == "Office Supplies"], 5000)
 ```
 
 
 
+```{r}
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Category == "Furniture"])
+shapiro.test(muestra)
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Category == "Technology"])
+
+```
+
+
+
+### Performance por subcategoría
+
+
+```{r}
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Sub.Category == "Chairs"])
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Sub.Category == "Phones"])
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Sub.Category == "Binders"])
+shapiro.test(dataframeDatos$Sales[dataframeDatos$Sub.Category == "Storage"])
+
+```
+
+#### Categorías y subcategorías
+
+En todas las categorías y subcategorías el p-value es menor a 0.05.
+Esto indica que las ventas no siguen una distribución normal.
+La performance es irregular y tiene valores extremos típicos de datos comerciales.
 
 
 
 
+### Productos más rentables vs menos rentables
+
+
+```{r}
+medianProfit <- median(dataframeDatos$Profit)
+
+shapiro.test(dataframeDatos$Profit[dataframeDatos$Profit >= medianProfit])  # más rentables
+shapiro.test(dataframeDatos$Profit[dataframeDatos$Profit < medianProfit])   # menos rentables
+
+```
+
+
+#### Más rentables vs menos rentables
+
+Tanto los productos más rentables como los menos rentables presentan p-value < 0.05.
+Por tanto, el profit no es normal en ningún grupo.
+Esto muestra que la rentabilidad está muy dispersa y concentrada en pocos productos.
+
+
+### Relación entre descuentos y profit
+
+```{r}
+muestraDiscount <- sample(dataframeDatos$Discount, 5000)
+muestraProfit <- sample(dataframeDatos$Profit, 5000)
+```
+
+```{r}
+shapiro.test(muestraDiscount)
+shapiro.test(muestraProfit)
+```
+
+
+Discount
+
+El p-value del Shapiro-Wilk es menor a 0.05, lo que indica que la variable Discount no sigue una distribución normal.
+Esto es esperado porque los descuentos suelen concentrarse en intervalos específicos.
+
+
+Profit
+
+El p-value es menor a 0.05, por lo que Profit no presenta normalidad.
+Esto coincide con los datos comerciales, donde hay muchos valores bajos y pocos valores extremos altos o negativos.
 
 
 
